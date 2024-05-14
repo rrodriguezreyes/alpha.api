@@ -24,6 +24,11 @@ Se ha configurado un pipeline para la implementación continua. Cada vez que se 
 ![image](https://github.com/rrodriguezreyes/alpha.api/assets/39017677/6b042905-e475-48a5-abdd-efaf48997572)
 ![image](https://github.com/rrodriguezreyes/alpha.api/assets/39017677/08dd63e3-97c2-442c-ab02-a5e0c314c7e7)
 
+Se agrego como se solicito el jwt usando una llave secreta para poder consumir los servicios debe registrar un usuario y hacer login
+o puede usar uno de los usuarios de prueba : a@test.com
+
+![image](https://github.com/rrodriguezreyes/alpha.api/assets/39017677/7f5efb11-6394-43ec-b94a-82e218ab7ba2)
+
 
 ## Instalación
 
