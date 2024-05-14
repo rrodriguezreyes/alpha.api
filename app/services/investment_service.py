@@ -14,7 +14,7 @@ async def calculate_investment_dates(request: InvestmentRequest) -> InvestmentRe
         fecha_inicio = datetime.strptime(request.fecha_creacion, "%Y-%m-%d %H:%M:%S")
         plazo = request.plazo
 
-        # Ajustar la fecha de inicio según la hora operativa
+        # Ajustar la fecha de inicio según el horario operativo
         if fecha_inicio.hour <= hora_operativa.hour:
             dias_a_sumar = product_properties["days_creation_below_operational_hour"]
         else:
@@ -28,22 +28,17 @@ async def calculate_investment_dates(request: InvestmentRequest) -> InvestmentRe
                 dias_a_sumar = product_properties["days_creation_above_operational_hour_reinvestment"]
 
         fecha_inicio += timedelta(days=dias_a_sumar)
+        # Obtener la lista de días feriados
+        dias_feriados = await investment_repository.get_holidays()
 
         # Calcular la fecha de fin inicial
         fecha_fin = fecha_inicio + timedelta(days=plazo)
 
-        # Ajustar la fecha de fin para que sea un día laboral
-        while fecha_fin.weekday() >= 5:  # 5: Sábado, 6: Domingo
+        # Ajustar la fecha de fin para que no sea un día festivo ni fin de semana
+        while fecha_fin.weekday() >= 5 or fecha_fin.date() in dias_feriados:
             fecha_fin += timedelta(days=1)
 
-        # Obtener la lista de días feriados
-        dias_feriados = await investment_repository.get_holidays()
-
-        # Ajustar la fecha de fin para que no sea un día feriado
-        while fecha_fin in dias_feriados:
-            fecha_fin += timedelta(days=1)
-
-        # Calcular plazo real
+        # Calcular plazo real (añadiendo 1 para incluir el día de inicio)
         plazo_real = (fecha_fin - fecha_inicio).days
 
         return InvestmentResponse(
