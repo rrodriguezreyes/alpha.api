@@ -1,13 +1,15 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List, Optional
+
+from app.auth import AuthHandler
 from app.models.product import Product
 from app.services.product_service import list_products, create_product
 
 router = APIRouter()
-
+auth_handler = AuthHandler()
 
 @router.get("/", response_model=List[Product])
-async def get_products():
+async def get_products(username=Depends(auth_handler.auth_wrapper)):
         return await list_products()
 
 
