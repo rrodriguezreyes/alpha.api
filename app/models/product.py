@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from datetime import time
 
 class Product(BaseModel):
+    id: int
     name: str
     description: Optional[str]
     days_creation_below_operational_hour: int
